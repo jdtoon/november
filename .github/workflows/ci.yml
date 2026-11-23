@@ -11,15 +11,6 @@ on:
       - infra/**
       - docker-compose.yml
       - .github/workflows/ci.yml
-  pull_request:
-    branches:
-      - main
-    paths:
-      - bff/**
-      - frontend/**
-      - infra/**
-      - docker-compose.yml
-      - .github/workflows/ci.yml
 
 permissions:
   contents: read
