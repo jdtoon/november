@@ -1,0 +1,52 @@
+.stepper {
+  margin-bottom: var(--n-space-4);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--n-space-5);
+}
+
+.stepTitle {
+  font-size: var(--n-text-lg);
+}
+
+.stepTitle:focus {
+  outline: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--n-space-4);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--n-space-4);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--n-space-3);
+}
+
+.declarations {
+  margin: 0;
+  padding-left: var(--n-space-5);
+  color: var(--n-color-text-muted);
+}
+
+.panelTitle {
+  font-size: var(--n-text-md);
+}
+
+.preview {
+  padding: var(--n-space-4);
+  border: 1px solid var(--n-color-border);
+  border-radius: var(--n-radius-md);
+  background: var(--n-color-surface-muted);
+}

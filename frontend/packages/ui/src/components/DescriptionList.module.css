@@ -1,0 +1,21 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: var(--n-space-4) var(--n-space-5);
+  margin: 0;
+}
+
+.item {
+  min-width: 0;
+}
+
+.term {
+  color: var(--n-color-text-muted);
+  font-size: var(--n-text-sm);
+}
+
+.description {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}

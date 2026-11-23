@@ -1,0 +1,9 @@
+.money {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.emphasis {
+  font-size: var(--n-text-lg);
+  font-weight: 700;
+}

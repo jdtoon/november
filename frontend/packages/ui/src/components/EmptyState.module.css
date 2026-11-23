@@ -1,0 +1,18 @@
+.empty {
+  padding: var(--n-space-6) var(--n-space-4);
+  text-align: center;
+}
+
+.title {
+  font-size: var(--n-text-lg);
+  font-weight: 600;
+}
+
+.description {
+  margin-top: var(--n-space-2);
+  color: var(--n-color-text-muted);
+}
+
+.action {
+  margin-top: var(--n-space-4);
+}

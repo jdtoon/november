@@ -1,0 +1,29 @@
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--n-space-2);
+}
+
+.tab {
+  min-height: 2.25rem;
+  padding: 0 var(--n-space-4);
+  border: 1px solid var(--n-color-border-strong);
+  border-radius: 999px;
+  background: var(--n-color-surface);
+  color: var(--n-color-text);
+  font: inherit;
+  font-size: var(--n-text-sm);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab:hover {
+  background: var(--n-color-surface-muted);
+}
+
+.active,
+.active:hover {
+  background: var(--n-color-primary);
+  border-color: var(--n-color-primary);
+  color: var(--n-color-on-primary);
+}

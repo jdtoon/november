@@ -1,0 +1,21 @@
+server {
+    listen 8080;
+    server_name _;
+    server_tokens off;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    gzip on;
+    gzip_min_length 1024;
+    gzip_types text/css application/javascript application/json image/svg+xml;
+
+    include /etc/nginx/snippets/security-headers.conf;
+    include /etc/nginx/snippets/static-files.conf;
+
+    location / {
+        add_header Cache-Control "no-cache" always;
+        include /etc/nginx/snippets/security-headers.conf;
+        try_files $uri $uri/ =404;
+    }
+}

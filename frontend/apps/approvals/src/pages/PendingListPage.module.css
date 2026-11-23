@@ -1,0 +1,19 @@
+.reference {
+  color: var(--n-color-text-muted);
+  font-size: var(--n-text-xs);
+}
+
+.flag {
+  display: inline-block;
+  max-width: 16rem;
+  color: var(--n-color-warning);
+  font-weight: 600;
+}
+
+.notice {
+  margin-bottom: var(--n-space-4);
+}
+
+.pad {
+  padding: var(--n-space-5);
+}

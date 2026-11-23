@@ -1,0 +1,44 @@
+.page {
+  min-height: 100vh;
+  padding: var(--n-space-6) var(--n-space-4);
+  background: linear-gradient(180deg, var(--n-color-header) 0, var(--n-color-header) 11rem, var(--n-color-bg) 11rem);
+}
+
+.panel {
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.panel > header h1,
+.panel > header p {
+  color: var(--n-color-on-header);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--n-space-4);
+  margin: var(--n-space-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.description {
+  min-height: 3rem;
+}
+
+.roles {
+  display: flex;
+  gap: var(--n-space-1);
+  margin: var(--n-space-3) 0 var(--n-space-4);
+}
+
+.role {
+  --n-color-on-header: var(--n-color-text);
+  color: var(--n-color-text);
+}
+
+.role span {
+  border-color: var(--n-color-border-strong);
+  background: var(--n-color-surface-muted);
+}

@@ -1,0 +1,31 @@
+{
+  "name": "november-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "November micro frontends: a shell host and three Module Federation remotes",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names shell,payments,approvals,incoming --prefix-colors cyan,green,yellow,magenta \"npm run dev -w @november/shell\" \"npm run dev -w @november/payments\" \"npm run dev -w @november/approvals\" \"npm run dev -w @november/incoming\"",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@module-federation/rsbuild-plugin": "^2.9.3",
+    "@rsbuild/core": "^2.3.3",
+    "@rsbuild/plugin-react": "^2.1.1",
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "concurrently": "^10.0.7",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.1"
+  }
+}

@@ -1,0 +1,35 @@
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: var(--n-text-xs);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.success {
+  background: var(--n-color-success-soft);
+  color: var(--n-color-success);
+}
+.warning {
+  background: var(--n-color-warning-soft);
+  color: var(--n-color-warning);
+}
+.danger {
+  background: var(--n-color-danger-soft);
+  color: var(--n-color-danger);
+}
+.info {
+  background: var(--n-color-info-soft);
+  color: var(--n-color-info);
+}
+.neutral {
+  background: var(--n-color-neutral-soft);
+  color: var(--n-color-neutral);
+}
+.chip {
+  background: rgba(255, 255, 255, 0.16);
+  color: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}

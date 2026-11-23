@@ -1,0 +1,23 @@
+{
+  "name": "@november/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "November shell/remote contract: API types and client, events, query keys and hooks",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@november/ui": "*"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "^5.108.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router": "^8.5.2"
+  }
+}

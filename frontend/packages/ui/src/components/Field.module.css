@@ -1,0 +1,71 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--n-space-1);
+  min-width: 0;
+}
+
+.label {
+  font-weight: 600;
+  font-size: var(--n-text-sm);
+}
+
+.required {
+  color: var(--n-color-danger);
+}
+
+.hint {
+  color: var(--n-color-text-muted);
+  font-size: var(--n-text-sm);
+}
+
+.error {
+  color: var(--n-color-danger);
+  font-size: var(--n-text-sm);
+  font-weight: 600;
+}
+
+.control {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--n-space-2) var(--n-space-3);
+  border: 1px solid var(--n-color-border-strong);
+  border-radius: var(--n-radius-md);
+  background: var(--n-color-surface);
+  color: var(--n-color-text);
+  font: inherit;
+}
+
+.control:focus-visible {
+  border-color: var(--n-color-primary);
+  box-shadow: var(--n-focus-ring);
+}
+
+.control[aria-invalid="true"] {
+  border-color: var(--n-color-danger);
+}
+
+.control:disabled {
+  background: var(--n-color-surface-muted);
+  color: var(--n-color-text-muted);
+}
+
+textarea.control {
+  min-height: 5.5rem;
+  resize: vertical;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--n-space-3);
+  cursor: pointer;
+}
+
+.checkbox input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0.15rem 0 0;
+  accent-color: var(--n-color-primary);
+  flex: none;
+}

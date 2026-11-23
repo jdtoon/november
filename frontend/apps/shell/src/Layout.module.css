@@ -1,0 +1,130 @@
+.shell {
+  min-height: 100vh;
+}
+
+.skip {
+  position: absolute;
+  top: -4rem;
+  left: var(--n-space-3);
+  padding: var(--n-space-2) var(--n-space-3);
+  background: var(--n-color-surface);
+  border-radius: var(--n-radius-md);
+  z-index: 10;
+}
+
+.skip:focus {
+  top: var(--n-space-2);
+}
+
+.header {
+  background: var(--n-color-header);
+  color: var(--n-color-on-header);
+}
+
+.headerInner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--n-space-3);
+  max-width: var(--n-content-width);
+  margin: 0 auto;
+  padding: var(--n-space-3) var(--n-space-5);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: var(--n-text-lg);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.company {
+  font-size: var(--n-text-sm);
+  opacity: 0.85;
+}
+
+.user {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--n-space-3);
+}
+
+.name {
+  font-weight: 600;
+}
+
+.roles {
+  display: inline-flex;
+  gap: var(--n-space-1);
+}
+
+.nav {
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.navList {
+  display: flex;
+  gap: var(--n-space-1);
+  max-width: var(--n-content-width);
+  margin: 0 auto;
+  padding: 0 var(--n-space-4);
+  list-style: none;
+  overflow-x: auto;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--n-space-2);
+  min-height: 2.75rem;
+  padding: 0 var(--n-space-4);
+  border-bottom: 3px solid transparent;
+  color: var(--n-color-on-header);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.link:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--n-color-on-header);
+}
+
+.active {
+  border-bottom-color: #7fd3e6;
+}
+
+.badge {
+  min-width: 1.4rem;
+  padding: 0 0.4rem;
+  border-radius: 999px;
+  background: #f5b942;
+  color: #3a2700;
+  font-size: var(--n-text-xs);
+  font-weight: 700;
+  line-height: 1.4rem;
+  text-align: center;
+}
+
+.main {
+  max-width: var(--n-content-width);
+  margin: 0 auto;
+  padding: var(--n-space-5);
+}
+
+@media (max-width: 40rem) {
+  .headerInner {
+    padding: var(--n-space-3) var(--n-space-4);
+  }
+
+  .main {
+    padding: var(--n-space-4);
+  }
+}

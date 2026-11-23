@@ -1,0 +1,34 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--n-space-3);
+  padding: var(--n-space-3) var(--n-space-5);
+  background: var(--n-color-header);
+  color: var(--n-color-on-header);
+}
+
+.user {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--n-space-2);
+}
+
+.page {
+  max-width: var(--n-content-width);
+  margin: 0 auto;
+  padding: var(--n-space-5);
+}
+
+.personas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--n-space-4);
+}
+
+.roles {
+  margin: var(--n-space-2) 0 var(--n-space-4);
+  color: var(--n-color-text-muted);
+  font-size: var(--n-text-sm);
+}

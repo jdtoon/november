@@ -1,0 +1,6 @@
+.center {
+  display: grid;
+  min-height: 60vh;
+  padding: var(--n-space-5);
+  place-items: center;
+}

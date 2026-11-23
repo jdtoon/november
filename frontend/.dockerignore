@@ -1,0 +1,9 @@
+**/node_modules
+**/dist
+**/.rsbuild
+**/@mf-types
+**/*.log
+.git
+Dockerfile
+.dockerignore
+README.md
