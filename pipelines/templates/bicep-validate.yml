@@ -1,0 +1,20 @@
+parameters:
+  - name: templateFile
+    type: string
+    default: infra/main.bicep
+  - name: parameterFiles
+    type: object
+    default:
+      - infra/main.dev.bicepparam
+      - infra/main.prod.bicepparam
+
+steps:
+  - script: az bicep install
+    displayName: Install Bicep
+
+  - script: az bicep build --file ${{ parameters.templateFile }} --stdout > /dev/null
+    displayName: Build ${{ parameters.templateFile }}
+
+  - ${{ each parameterFile in parameters.parameterFiles }}:
+      - script: az bicep build-params --file ${{ parameterFile }} --stdout > /dev/null
+        displayName: Build ${{ parameterFile }}

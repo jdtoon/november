@@ -1,0 +1,9 @@
+variables:
+  - name: environmentName
+    value: prod
+  - name: serviceConnection
+    value: sc-november-prod
+  - name: resourceGroup
+    value: rg-november-prod
+  - name: parameterFile
+    value: infra/main.prod.bicepparam

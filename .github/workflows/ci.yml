@@ -1,0 +1,106 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - bff/**
+      - frontend/**
+      - infra/**
+      - docker-compose.yml
+      - .github/workflows/ci.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - bff/**
+      - frontend/**
+      - infra/**
+      - docker-compose.yml
+      - .github/workflows/ci.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bff:
+    name: BFF build and test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bff
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet restore November.Bff.slnx
+      - run: dotnet build November.Bff.slnx --configuration Release --no-restore
+      - run: dotnet test --solution November.Bff.slnx --configuration Release --no-build
+
+  frontend:
+    name: Frontend typecheck and build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+
+  infra:
+    name: Bicep build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: az bicep install
+      - run: az bicep build --file infra/main.bicep --stdout > /dev/null
+      - run: az bicep build-params --file infra/main.dev.bicepparam --stdout > /dev/null
+      - run: az bicep build-params --file infra/main.prod.bicepparam --stdout > /dev/null
+
+  containers:
+    name: Image ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: bff
+            context: ./bff
+            build-args: ""
+          - name: shell
+            context: ./frontend
+            build-args: APP=shell
+          - name: payments
+            context: ./frontend
+            build-args: APP=payments
+          - name: approvals
+            context: ./frontend
+            build-args: APP=approvals
+          - name: incoming
+            context: ./frontend
+            build-args: APP=incoming
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.context }}/Dockerfile
+          build-args: ${{ matrix.build-args }}
+          tags: november-${{ matrix.name }}:ci
+          push: false
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,scope=${{ matrix.name }},mode=max

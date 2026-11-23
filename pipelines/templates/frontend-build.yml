@@ -1,0 +1,33 @@
+parameters:
+  - name: workingDirectory
+    type: string
+    default: frontend
+  - name: nodeVersion
+    type: string
+    default: 24.x
+
+steps:
+  - task: NodeTool@0
+    displayName: Install Node ${{ parameters.nodeVersion }}
+    inputs:
+      versionSpec: ${{ parameters.nodeVersion }}
+
+  - task: Cache@2
+    displayName: Restore npm cache
+    inputs:
+      key: 'npm | "$(Agent.OS)" | ${{ parameters.workingDirectory }}/package-lock.json'
+      restoreKeys: |
+        npm | "$(Agent.OS)"
+      path: $(Pipeline.Workspace)/.npm
+
+  - script: npm ci --cache $(Pipeline.Workspace)/.npm
+    displayName: Install dependencies
+    workingDirectory: ${{ parameters.workingDirectory }}
+
+  - script: npm run typecheck
+    displayName: Typecheck
+    workingDirectory: ${{ parameters.workingDirectory }}
+
+  - script: npm run build
+    displayName: Build
+    workingDirectory: ${{ parameters.workingDirectory }}

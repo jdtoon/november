@@ -1,0 +1,153 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger: none
+pr: none
+
+resources:
+  pipelines:
+    - pipeline: ci
+      source: november-ci
+      trigger:
+        branches:
+          include:
+            - main
+
+parameters:
+  - name: deployProd
+    displayName: Continue to prod after dev succeeds
+    type: boolean
+    default: true
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - template: variables/common.yml
+  - name: imageTag
+    value: $(Build.SourceVersion)
+
+stages:
+  - stage: Images
+    displayName: Build and push images
+    variables:
+      - template: variables/dev.yml
+    jobs:
+      - job: Registry
+        displayName: Ensure dev registry
+        steps:
+          - checkout: self
+          - template: templates/deploy-infra.yml
+            parameters:
+              serviceConnection: $(serviceConnection)
+              resourceGroup: $(resourceGroup)
+              location: $(location)
+              parameterFile: $(parameterFile)
+              imageTag: $(imageTag)
+              deployApps: false
+              stepName: registry
+
+      - job: Push
+        displayName: Push image
+        dependsOn: Registry
+        variables:
+          acrName: $[ dependencies.Registry.outputs['registry.acrName'] ]
+        strategy:
+          matrix:
+            bff:
+              repository: november-bff
+              context: bff
+              buildArguments: --pull
+            shell:
+              repository: november-shell
+              context: frontend
+              buildArguments: --pull --build-arg APP=shell
+            payments:
+              repository: november-payments
+              context: frontend
+              buildArguments: --pull --build-arg APP=payments
+            approvals:
+              repository: november-approvals
+              context: frontend
+              buildArguments: --pull --build-arg APP=approvals
+            incoming:
+              repository: november-incoming
+              context: frontend
+              buildArguments: --pull --build-arg APP=incoming
+        steps:
+          - checkout: self
+          - template: templates/push-images.yml
+            parameters:
+              serviceConnection: $(serviceConnection)
+              acrName: $(acrName)
+              repository: $(repository)
+              context: $(context)
+              buildArguments: $(buildArguments)
+              tag: $(imageTag)
+
+  - stage: DeployDev
+    displayName: Deploy dev
+    dependsOn: Images
+    variables:
+      - template: variables/dev.yml
+    jobs:
+      - deployment: Infra
+        displayName: Deploy infrastructure and apps
+        environment: november-dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - template: templates/deploy-infra.yml
+                  parameters:
+                    serviceConnection: $(serviceConnection)
+                    resourceGroup: $(resourceGroup)
+                    location: $(location)
+                    parameterFile: $(parameterFile)
+                    imageTag: $(imageTag)
+                    deployApps: true
+
+  - stage: DeployProd
+    displayName: Deploy prod
+    dependsOn:
+      - Images
+      - DeployDev
+    condition: and(succeeded(), eq('${{ parameters.deployProd }}', 'true'))
+    variables:
+      - template: variables/prod.yml
+    jobs:
+      - deployment: Infra
+        displayName: Promote images, review changes and deploy
+        environment: november-prod
+        variables:
+          devRegistryLoginServer: $[ stageDependencies.Images.Registry.outputs['registry.acrLoginServer'] ]
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                - template: templates/deploy-infra.yml
+                  parameters:
+                    serviceConnection: $(serviceConnection)
+                    resourceGroup: $(resourceGroup)
+                    location: $(location)
+                    parameterFile: $(parameterFile)
+                    imageTag: $(imageTag)
+                    deployApps: false
+                    stepName: registry
+                - template: templates/promote-images.yml
+                  parameters:
+                    serviceConnection: $(serviceConnection)
+                    sourceRegistryLoginServer: $(devRegistryLoginServer)
+                    targetRegistryName: $(registry.acrName)
+                    tag: $(imageTag)
+                - template: templates/deploy-infra.yml
+                  parameters:
+                    serviceConnection: $(serviceConnection)
+                    resourceGroup: $(resourceGroup)
+                    location: $(location)
+                    parameterFile: $(parameterFile)
+                    imageTag: $(imageTag)
+                    deployApps: true
+                    runWhatIf: true
+                    stepName: apps

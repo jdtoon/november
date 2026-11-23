@@ -1,0 +1,44 @@
+parameters:
+  - name: workingDirectory
+    type: string
+  - name: solution
+    type: string
+  - name: dotnetVersion
+    type: string
+    default: 10.0.x
+  - name: buildConfiguration
+    type: string
+    default: Release
+
+steps:
+  - task: UseDotNet@2
+    displayName: Install .NET SDK ${{ parameters.dotnetVersion }}
+    inputs:
+      packageType: sdk
+      version: ${{ parameters.dotnetVersion }}
+
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: ${{ parameters.workingDirectory }}/${{ parameters.solution }}
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: ${{ parameters.workingDirectory }}/${{ parameters.solution }}
+      arguments: --configuration ${{ parameters.buildConfiguration }} --no-restore
+
+  - script: dotnet test --solution ${{ parameters.solution }} --configuration ${{ parameters.buildConfiguration }} --no-build --report-xunit-trx --results-directory $(Agent.TempDirectory)/test-results
+    displayName: Test
+    workingDirectory: ${{ parameters.workingDirectory }}
+
+  - task: PublishTestResults@2
+    displayName: Publish test results
+    condition: succeededOrFailed()
+    inputs:
+      testResultsFormat: VSTest
+      testResultsFiles: "**/*.trx"
+      searchFolder: $(Agent.TempDirectory)/test-results
+      testRunTitle: BFF tests

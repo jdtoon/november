@@ -1,0 +1,22 @@
+parameters:
+  - name: repository
+    type: string
+  - name: context
+    type: string
+  - name: buildArguments
+    type: string
+    default: --pull
+  - name: tag
+    type: string
+    default: $(Build.BuildId)
+
+steps:
+  - task: Docker@2
+    displayName: Build ${{ parameters.repository }}
+    inputs:
+      command: build
+      repository: ${{ parameters.repository }}
+      dockerfile: ${{ parameters.context }}/Dockerfile
+      buildContext: ${{ parameters.context }}
+      arguments: ${{ parameters.buildArguments }}
+      tags: ${{ parameters.tag }}

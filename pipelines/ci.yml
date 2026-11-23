@@ -1,0 +1,89 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - bff
+      - frontend
+      - infra
+      - pipelines
+      - docker-compose.yml
+
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - bff
+      - frontend
+      - infra
+      - pipelines
+      - docker-compose.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - template: variables/common.yml
+
+stages:
+  - stage: Validate
+    displayName: Build, test and validate
+    jobs:
+      - job: Bff
+        displayName: BFF build and test
+        steps:
+          - template: templates/dotnet-build.yml
+            parameters:
+              workingDirectory: $(bffDirectory)
+              solution: $(bffSolution)
+              dotnetVersion: $(dotnetVersion)
+              buildConfiguration: $(buildConfiguration)
+
+      - job: Frontend
+        displayName: Frontend typecheck and build
+        steps:
+          - template: templates/frontend-build.yml
+            parameters:
+              workingDirectory: $(frontendDirectory)
+              nodeVersion: $(nodeVersion)
+
+      - job: Infra
+        displayName: Bicep build
+        steps:
+          - template: templates/bicep-validate.yml
+
+      - job: Containers
+        displayName: Container image build
+        strategy:
+          matrix:
+            bff:
+              repository: november-bff
+              context: bff
+              buildArguments: --pull
+            shell:
+              repository: november-shell
+              context: frontend
+              buildArguments: --pull --build-arg APP=shell
+            payments:
+              repository: november-payments
+              context: frontend
+              buildArguments: --pull --build-arg APP=payments
+            approvals:
+              repository: november-approvals
+              context: frontend
+              buildArguments: --pull --build-arg APP=approvals
+            incoming:
+              repository: november-incoming
+              context: frontend
+              buildArguments: --pull --build-arg APP=incoming
+        steps:
+          - template: templates/docker-build.yml
+            parameters:
+              repository: $(repository)
+              context: $(context)
+              buildArguments: $(buildArguments)

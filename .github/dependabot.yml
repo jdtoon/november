@@ -1,0 +1,49 @@
+version: 2
+
+updates:
+  - package-ecosystem: nuget
+    directory: /bff
+    schedule:
+      interval: weekly
+    groups:
+      nuget-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: npm
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      npm-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: docker
+    directory: /bff
+    schedule:
+      interval: weekly
+    groups:
+      docker-bff:
+        patterns:
+          - "*"
+
+  - package-ecosystem: docker
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      docker-frontend:
+        patterns:
+          - "*"

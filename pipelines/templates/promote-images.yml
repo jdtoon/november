@@ -1,0 +1,32 @@
+parameters:
+  - name: serviceConnection
+    type: string
+  - name: sourceRegistryLoginServer
+    type: string
+  - name: targetRegistryName
+    type: string
+  - name: tag
+    type: string
+  - name: repositories
+    type: object
+    default:
+      - november-bff
+      - november-shell
+      - november-payments
+      - november-approvals
+      - november-incoming
+
+steps:
+  - ${{ each repository in parameters.repositories }}:
+      - task: AzureCLI@2
+        displayName: Import ${{ repository }}:${{ parameters.tag }}
+        inputs:
+          azureSubscription: ${{ parameters.serviceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            az acr import \
+              --name ${{ parameters.targetRegistryName }} \
+              --source ${{ parameters.sourceRegistryLoginServer }}/${{ repository }}:${{ parameters.tag }} \
+              --image ${{ repository }}:${{ parameters.tag }} \
+              --force

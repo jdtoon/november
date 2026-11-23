@@ -1,0 +1,15 @@
+variables:
+  - name: dotnetVersion
+    value: 10.0.x
+  - name: nodeVersion
+    value: 24.x
+  - name: buildConfiguration
+    value: Release
+  - name: bffDirectory
+    value: bff
+  - name: bffSolution
+    value: November.Bff.slnx
+  - name: frontendDirectory
+    value: frontend
+  - name: location
+    value: westeurope

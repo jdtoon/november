@@ -1,0 +1,9 @@
+variables:
+  - name: environmentName
+    value: dev
+  - name: serviceConnection
+    value: sc-november-dev
+  - name: resourceGroup
+    value: rg-november-dev
+  - name: parameterFile
+    value: infra/main.dev.bicepparam
